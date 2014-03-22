@@ -1,7 +1,15 @@
 == README
 
+Probably want to run bundle like so...
+
+bundle install --without production
+
+...unless you want to get postgresql up and running locally.
+
 gotta set up a .env file at the root with these two lines in it...
 
 TWITTER_CONSUMER_KEY= 'key goes here'
 
 TWITTER_CONSUMER_SECRET = 'key goes here'
+
+
