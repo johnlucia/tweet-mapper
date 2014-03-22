@@ -3,4 +3,5 @@
 gotta set up a .env file at the root with these two lines in it...
 
 TWITTER_CONSUMER_KEY= 'key goes here'
+
 TWITTER_CONSUMER_SECRET = 'key goes here'
