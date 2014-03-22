@@ -1,69 +1,39 @@
 <div id="map-canvas"></div>
 
-<% @tweets.each do |tweet| %>
-  <div class="tweet">
-    <p><%= @user.screen_name %></p>
-    <p><%= tweet.created_at %></p>
-    <p><%= tweet.text %></p>
-    <p><%= tweet.geo.inspect %></p>
-    <p><%= "#{tweet.geo.try(:lat)}, #{tweet.geo.try(:long)}" %></p>
-  </div>
-<% end %>
 
 <script type="text/javascript">
 
   var markerBounds = new google.maps.LatLngBounds();
+  var mapOptions = {
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
 
-  var tweetSpots = [
-    <% @tweets.each_with_index do |tweet, i| %>
-      [
-        new google.maps.LatLng(<%= "#{tweet.geo.try(:lat)}, #{tweet.geo.try(:long)}" %>),
-        '<%= tweet.text %>'
-      ]<%= "," unless i == @tweets.length - 1 %>
-    <% end %>
-  ];
+  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+  
 
-  $.each(tweetSpots, function( index, tweetSpot ) {
-    markerBounds.extend(tweetSpot[0]);
-  });
-
-  var myLatlng = new google.maps.LatLng(44.0222006, -121.32677294);
-  var markers = [];
-  var iterator = 0;
-
-  var map;
-
-  function initialize() {
-    var mapOptions = {
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    map.fitBounds(markerBounds);
-    drop();
-  }
-
-  function drop() {
-    for (var i = 0; i < tweetSpots.length; i++) {
-      setTimeout(function() {
-        addMarker();
-      }, i * 500);
-    }
-  }
-
-  function addMarker() {
-    markers.push(new google.maps.Marker({
-      position: tweetSpots[iterator][0],
-      title: tweetSpots[iterator][1],
-      icon: '/assets/twitter-bird.png',
+  <% @tweets.each_with_index do |tweet, i| %>
+    // Set Marker <%= i %>
+    var tweetSpot<%= i %> = new google.maps.LatLng(<%= "#{tweet.geo.try(:lat)}, #{tweet.geo.try(:long)}" %>)
+    var marker<%= i %> = new google.maps.Marker({
+      position: tweetSpot<%= i %>,
       map: map,
-      draggable: false,
-      animation: google.maps.Animation.DROP
-    }));
-    iterator++;
-  }
+      icon: '/assets/twitter-bird.png'
+    });
 
-  google.maps.event.addDomListener(window, 'load', initialize);
+    // Bump Map Bounds
+    markerBounds.extend(tweetSpot<%= i %>);
+
+    // Create Info Window
+    var infowindow<%= i %> = new google.maps.InfoWindow({
+      content: '<p><%= @user.screen_name %></p><p><%= tweet.created_at %></p><p><%= tweet.text %></p>'
+    });
+
+    // Hook up info windo to marker
+    google.maps.event.addListener(marker<%= i %>, 'click', function() {
+    infowindow<%= i %>.open(map, marker<%= i %>);
+    });
+  <% end %>
+  
+  map.fitBounds(markerBounds);
+
 </script>
-
-<p><%= @tweets.inspect %></p>
