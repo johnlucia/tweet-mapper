@@ -2,9 +2,9 @@
 
 Probably want to run bundle like so...
 
-```
-bundle install --without production
-```
+
+bundle install \-\-without production
+
 
 ...unless you want to get postgresql up and running locally.
 
