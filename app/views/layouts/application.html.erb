@@ -10,6 +10,15 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGYyA18oLo5vloJEFfQMi44rGI5Wu78OA&sensor=false"></script>
 
+  <script type="text/javascript">
+    var script = '<script type="text/javascript" src="/assets/markerclusterer.js"';
+    if (document.location.search.indexOf('compiled') !== -1) {
+      script += '_packed';
+    }
+    script += '.js"><' + '/script>';
+    document.write(script);
+  </script>
+
 </head>
 <body>
 

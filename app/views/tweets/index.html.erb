@@ -10,15 +10,17 @@
 
   map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
   
+  var markers = [];
 
   <% @tweets.each_with_index do |tweet, i| %>
     // Set Marker <%= i %>
     var tweetSpot<%= i %> = new google.maps.LatLng(<%= "#{tweet.geo.try(:lat)}, #{tweet.geo.try(:long)}" %>)
     var marker<%= i %> = new google.maps.Marker({
       position: tweetSpot<%= i %>,
-      map: map,
       icon: '/assets/twitter-bird.png'
     });
+
+    markers.push(marker<%= i %>);
 
     // Bump Map Bounds
     markerBounds.extend(tweetSpot<%= i %>);
@@ -35,5 +37,7 @@
   <% end %>
   
   map.fitBounds(markerBounds);
+
+  var markerCluster = new MarkerClusterer(map, markers);
 
 </script>
